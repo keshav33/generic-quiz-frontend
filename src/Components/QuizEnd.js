@@ -1,13 +1,13 @@
 import React from 'react';
 
 const QuizEnd = (props) => {
-    const score = props.quizResponse.filter(quiz => quiz.response.response === true);
+    const score = props.quizResponse.filter(quiz => quiz && quiz.response && quiz.response.response === true).length;
     return (
         <div>
             Quiz Over (Score: {score}/20)
-            {props.quizResponse.map(quiz => {
+            {props.quizResponse.map((quiz, index) => {
                 return (
-                    <div
+                    <div key={index}
                         className={quiz.response.response === true ? 'correct-answer' : 'wrong-answer'}
                     >
                         {quiz.quizQuestion} = {quiz.response.input}
