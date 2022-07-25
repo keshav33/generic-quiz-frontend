@@ -10,6 +10,7 @@ const QuizContainer = (props) => {
     const [startQuiz, setStartQuiz] = useState(false);
     const [quizQuestion, setQuizQuestion] = useState('');
     const [numberRange, setNumberRange] = useState('');
+    const [numberOfQuestions, setNumberOfQuestions] = useState('');
     const [operatorTypes, setOperatorTypes] = useState([]);
     let timerInterval = null;
 
@@ -52,12 +53,15 @@ const QuizContainer = (props) => {
     }, [startQuiz, timer])
 
     useEffect(() => {
-        if (quizResponse.length === 20) {
+        if (quizResponse.length === numberOfQuestions) {
             clearInterval(timerInterval);
         }
     }, [quizResponse])
 
     const handleStartQuiz = () => {
+        if (numberOfQuestions <= 0) {
+            return alert('Please enter valid number of questions');
+        }
         if (numberRange <= 0) {
             return alert('Please enter valid test range');
         }
@@ -99,6 +103,10 @@ const QuizContainer = (props) => {
         setNumberRange(parseInt(value));
     }
 
+    const handleNumberOfQuestions = (value) => {
+        setNumberOfQuestions(parseInt(value))
+    }
+
     const handleOperatorType = (type) => {
         if (operatorTypes.includes(type)) {
             const updateOperatorTypes = operatorTypes.filter(ot => ot !== type);
@@ -110,28 +118,45 @@ const QuizContainer = (props) => {
 
     return (
         <div className='quiz-container'>
-            {quizResponse.length < 20 ?
+            {!numberOfQuestions || quizResponse.length < numberOfQuestions ?
                 <>
                     {
                         !startQuiz &&
                         <>
-                            <input
-                                type='number'
-                                placeholder='Input test range'
-                                value={numberRange}
-                                onChange={(event) => handleSetNumberRange(event.target.value)}
-                            />
+                            <div>
+                                <label name='questions'>Please enter the number of questions</label>
+                                <input
+                                    type='number'
+                                    placeholder='Input number of questions'
+                                    value={numberOfQuestions}
+                                    name='questions'
+                                    onChange={(event) => handleNumberOfQuestions(event.target.value)}
+                                />
+                            </div>
+                            <br />
+                            <div>
+                                <label name='range'>Please enter the range of random numbers</label>
+                                <input
+                                    type='number'
+                                    placeholder='Input test range'
+                                    value={numberRange}
+                                    name='range'
+                                    onChange={(event) => handleSetNumberRange(event.target.value)}
+                                />
+                            </div>
+                            <br />
+                            <label name='operator'>Please select the operator type for the test</label>
                             <span>
-                                <input type='checkbox' checked={operatorTypes.includes('+')} onClick={() => handleOperatorType('+')}/>+
+                                <input type='checkbox' checked={operatorTypes.includes('+')} onClick={() => handleOperatorType('+')} />+
                             </span>
                             <span>
-                                <input type='checkbox' checked={operatorTypes.includes('-')} onClick={() => handleOperatorType('-')}/>-
+                                <input type='checkbox' checked={operatorTypes.includes('-')} onClick={() => handleOperatorType('-')} />-
                             </span>
                             <span>
-                                <input type='checkbox' checked={operatorTypes.includes('/')} onClick={() => handleOperatorType('/')}/>/
+                                <input type='checkbox' checked={operatorTypes.includes('/')} onClick={() => handleOperatorType('/')} />/
                             </span>
                             <span>
-                                <input type='checkbox' checked={operatorTypes.includes('*')} onClick={() => handleOperatorType('*')}/>*
+                                <input type='checkbox' checked={operatorTypes.includes('*')} onClick={() => handleOperatorType('*')} />*
                             </span>
                         </>
 
@@ -142,7 +167,7 @@ const QuizContainer = (props) => {
                         quizQuestion={quizQuestion}
                         input={input}
                         quizResponse={quizResponse}
-                        numberOfQuestions={20}
+                        numberOfQuestions={numberOfQuestions}
                         handleInput={handleInput}
                         handleSubmit={handleSubmit}
                         handleResetQuiz={handleResetQuiz}
@@ -154,6 +179,7 @@ const QuizContainer = (props) => {
                     <QuizEnd
                         quizResponse={quizResponse}
                         startQuiz={startQuiz}
+                        numberOfQuestions={numberOfQuestions}
                         handleResetQuiz={handleResetQuiz}
                     />
                 )

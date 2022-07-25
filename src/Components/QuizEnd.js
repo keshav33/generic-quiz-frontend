@@ -4,7 +4,7 @@ const QuizEnd = (props) => {
     const score = props.quizResponse.filter(quiz => quiz && quiz.response && quiz.response.response === true).length;
     return (
         <div>
-            Quiz Over (Score: {score}/20)
+            Quiz Over (Score: {score}/{props.numberOfQuestions})
             {props.quizResponse.map((quiz, index) => {
                 return (
                     <div key={index}
