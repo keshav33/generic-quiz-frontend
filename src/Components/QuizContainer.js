@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { generateRandomQuestions } from '../utils.js/questionsHelper';
+import { generateRandomQuestions } from '../utils/questionsHelper';
 import QuizEnd from './QuizEnd';
 import QuizMain from './QuizMain';
 
