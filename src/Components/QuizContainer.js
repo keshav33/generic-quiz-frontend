@@ -27,16 +27,25 @@ const QuizContainer = (props) => {
         const updatedResponse = [...quizResponse, { quizQuestion, response }];
         setQuizResponse(updatedResponse);
         setQuizQuestion(generateRandomQuestions(numberRange, operatorTypes));
-        localStorage.setItem(props.type, JSON.stringify(updatedResponse));
+        const storageData = {quizResponse: updatedResponse, numberRange, numberOfQuestions, operatorTypes}
+        localStorage.setItem(props.type, JSON.stringify(storageData));
     }
 
     useEffect(() => {
         const savedResponse = localStorage.getItem(props.type)
-        if (savedResponse && JSON.parse(savedResponse).length > 0) {
-            setQuizResponse(JSON.parse(savedResponse));
-            setTimer(20)
-            setInput('');
-            setStartQuiz(true);
+        if (savedResponse) {
+            const storageResponse = JSON.parse(savedResponse);
+            const { quizResponse, numberRange, numberOfQuestions, operatorTypes } = storageResponse;
+            if (quizResponse.length > 0) {
+                setQuizResponse(quizResponse);
+                setNumberRange(numberRange);
+                setNumberOfQuestions(numberOfQuestions);
+                setOperatorTypes(operatorTypes);
+                setTimer(20);
+                setInput('');
+                setStartQuiz(true);
+                setQuizQuestion(generateRandomQuestions(numberRange, operatorTypes));
+            }
         }
     }, []);
 
